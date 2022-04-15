@@ -92,7 +92,16 @@ Chromosome::get_fitness() const
 bool
 Chromosome::is_valid() const
 {
-  if
+  if(cities_ptr->size()!=order_.size()){
+    return false;
+  }
+  else{
+    for(long unsigned int i = 0; i<order_.size(); i++){
+      int num_perm = std::count_if(order_.begin(), order_.end(), i);
+      bool valid = (num_perm == 1);
+      if(!valid) return false;
+    }
+  }
 	
 	// Add your implementation here
 }
