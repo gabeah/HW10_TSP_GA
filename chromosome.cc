@@ -84,7 +84,11 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
 double
 Chromosome::get_fitness() const
 {
-  // Add your implementation here
+  int fitness = 0;
+  for (j = 0; j < cities_ptr_->size(); j++){
+    fitness++;
+  }
+  return fitness;
 }
 
 // A chromsome is valid if it has no repeated values in its permutation,
@@ -97,13 +101,11 @@ Chromosome::is_valid() const
   }
   else{
     for(long unsigned int i = 0; i<order_.size(); i++){
-      int num_perm = std::count_if(order_.begin(), order_.end(), i);
-      bool valid = (num_perm == 1);
-      if(!valid) return false;
+      int value_count = std::count(order_.begin(), order_.end(), i);
+      if(value_count != 1) return false;
     }
+    return true;
   }
-	
-	// Add your implementation here
 }
 
 // Find whether a certain value appears in a given range of the chromosome.
