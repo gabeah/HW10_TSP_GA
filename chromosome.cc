@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cassert>
 #include <random>
+#include <limits>
 
 #include "chromosome.hh"
 
@@ -81,12 +82,37 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
 
 // Return a positive fitness value, with higher numbers representing
 // fitter solutions (shorter total-city traversal path).
+
+//Helper function that builds non-random permutations for the fitness values
+void all_permutations(Chromosome::perm_options_t options, std::vector<Cities::permutation_t>& every_perm, Cities::permutation_t& cur_permut){
+  if(options.empty()){
+    every_perm.push_back(cur_permut);
+    return;
+  }
+  Chromosome::perm_options_t next_iter_options = options;
+  for(auto element: options){
+    cur_permut.push_back(element);
+    next_iter_options.erase(element);
+    all_permutations(next_iter_options, every_perm, cur_permut);
+    next_iter_options.insert(element);
+    cur_permut.pop_back();
+  }
+}
+
 double
 Chromosome::get_fitness() const
 {
-  int fitness = 0;
-  for (j = 0; j < cities_ptr_->size(); j++){
-    fitness++;
+  double fitness = std::numeric_limits<double>::max(); //max will check the max to find min
+  Chromosome::perm_options_t cities_options;
+  for(int g = 0; g < cities_ptr_->size()-1; g++){
+    cities_options.insert(g);
+  }
+  std::vector<Cities::permutation_t> all_nu_perms;
+  Cities::permutation_t cur_nu_perm;
+  all_permutations(cities_options, all_nu_perms, cur_nu_perm);
+  for(auto permutationY: all_nu_perms){
+    double nu_cities_distance = cities_ptr_->total_path_distance(permutationY);
+    fitness = std::min(fitness, nu_cities_distance);
   }
   return fitness;
 }
@@ -96,7 +122,7 @@ Chromosome::get_fitness() const
 bool
 Chromosome::is_valid() const
 {
-  if(cities_ptr->size()!=order_.size()){
+  if(cities_ptr_->size()!=order_.size()){
     return false;
   }
   else{

@@ -111,10 +111,21 @@ ga_search(const Cities& cities,
   return best_ordering;
 }
 
-
+//void all_permutations(Chromosome::perm_options_t options, std::vector<Cities::permutation_t>& every_perm, Cities::permutation_t& cur_permut);
 //////////////////////////////////////////////////////////////////////////////
 int main(int argc, char** argv)
 {
+  //Chromosome::perm_options_t a = {0,1,2,3,4,5};
+  //std::vector<Cities::permutation_t> b;
+  //Cities::permutation_t c;
+  //all_permutations(a, b, c);
+  /*for(auto permutationY: b){
+    for(auto element: permutationY){
+      std::cout << element << ", ";
+    }
+    std::cout << std::endl;
+  }*/
+
   if (argc != 4) {
     std::cerr << "Required arguments: filename for cities, population size, and mutation rate\n";
     return -1;
@@ -138,6 +149,9 @@ int main(int argc, char** argv)
   }
 
   out << cities.reorder(best_ordering);
+
+  Chromosome a(&cities);
+  std::cout << a.get_fitness() << "this is fitness" << std:: endl;
 
   return 0;
 }

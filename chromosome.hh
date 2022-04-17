@@ -12,6 +12,7 @@
 
 #include "cities.hh"
 #include <random>
+#include <set>
 
 class Chromosome {
    // Disable public copying of objects for polymorphism:
@@ -60,6 +61,8 @@ class Chromosome {
   {
     return order_;
   }
+
+  using perm_options_t = std::set<unsigned int>;
 
  protected:
   // For an ordered set of parents, return a child using the ordered crossover.
