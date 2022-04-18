@@ -32,7 +32,11 @@ void
 Chromosome::mutate()
 {
   // Add your implementation here
-
+  int q = rand(1, order_.size());
+  int u = rand(1, order_.size());
+  auto thing = order_[q];
+  order_[q] = order_[u];
+  order_[u] = thing;
   assert(is_valid());
 }
 
@@ -44,8 +48,20 @@ Chromosome::recombine(const Chromosome* other)
 {
   assert(is_valid());
   assert(other->is_valid());
-
-  // Add your implementation here
+  unsigned a = rand(0, order_size());
+  unsigned b = rand(0, order_size());
+  unsigned beginning;
+  unsigned ending;
+  if(a<b){
+    beginning = a;
+    ending = b;
+  }
+  else{
+    beginning = b;
+    ending = a;
+  }
+  create_crossover_child(this, other, beginning, ending);
+  create_crossover_child(other, this, beginning, ending);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -84,7 +100,7 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
 // fitter solutions (shorter total-city traversal path).
 
 //Helper function that builds non-random permutations for the fitness values
-void all_permutations(Chromosome::perm_options_t options, std::vector<Cities::permutation_t>& every_perm, Cities::permutation_t& cur_permut){
+/*void all_permutations(Chromosome::perm_options_t options, std::vector<Cities::permutation_t>& every_perm, Cities::permutation_t& cur_permut){
   if(options.empty()){
     every_perm.push_back(cur_permut);
     return;
@@ -97,23 +113,12 @@ void all_permutations(Chromosome::perm_options_t options, std::vector<Cities::pe
     next_iter_options.insert(element);
     cur_permut.pop_back();
   }
-}
+}*/
 
 double
 Chromosome::get_fitness() const
 {
-  double fitness = std::numeric_limits<double>::max(); //max will check the max to find min
-  Chromosome::perm_options_t cities_options;
-  for(int g = 0; g < cities_ptr_->size()-1; g++){
-    cities_options.insert(g);
-  }
-  std::vector<Cities::permutation_t> all_nu_perms;
-  Cities::permutation_t cur_nu_perm;
-  all_permutations(cities_options, all_nu_perms, cur_nu_perm);
-  for(auto permutationY: all_nu_perms){
-    double nu_cities_distance = cities_ptr_->total_path_distance(permutationY);
-    fitness = std::min(fitness, nu_cities_distance);
-  }
+  double fitness = 1000000/(cities_ptr_->total_path_distance(order_));
   return fitness;
 }
 
@@ -141,4 +146,10 @@ bool
 Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
 {
   // Add your implementation here
+  for(unsigned g=begin; g < end; g++){
+    if(value = order_[g]){
+      return true;
+    }
+  }
+  return false;
 }
