@@ -9,14 +9,20 @@
 // Generate a Deme of the specified size with all-random chromosomes.
 // Also receives a mutation rate in the range [0-1].
 Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate)
+	: mut_rate_(mut_rate)
 {
-  // Add your implementation here
+	for(int u = 0; u < pop_size; ++ u){
+ 		Chromosme* ch1 = new Chromosome(cities_ptr);
+ 		pop_.insert(ch1);
+	}
 }
 
 // Clean up as necessary
 Deme::~Deme()
 {
-  // Add your implementation here
+ for(int j = 0; j < pop_size; ++ j){
+ 	delete pop_[j];
+ }
 }
 
 // Evolve a single generation of new chromosomes, as follows:
@@ -34,7 +40,12 @@ void Deme::compute_next_generation()
 // Return a copy of the chromosome with the highest fitness.
 const Chromosome* Deme::get_best() const
 {
-  // Add your implementation here
+	double highest = std::numeric_limits<double>::min();
+	for(auto chromosome: pop_){
+		double cur_chromo = chromosome->get_fitness();
+		highest = std::max(cur_chromo, highest);
+	}
+  	return highest;
 }
 
 // Randomly select a chromosome in the population based on fitness and
