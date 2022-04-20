@@ -31,6 +31,8 @@ class Deme {
   // Return a pointer to the chromosome with the highest fitness.
   const Chromosome* get_best() const;
 
+  double random_gen(double from, double to);
+
  protected:
   // Randomly select a chromosome in the population based on fitness and
   // return a pointer to that chromosome.
@@ -38,6 +40,7 @@ class Deme {
 
   std::vector<Chromosome*> pop_;  // Population of Chromosomes
   double mut_rate_;  // Mutation rate (fraction in range [0,1])
+  std::vector<double> fitness_intervals_; // to host all the probablities of fitness
 
   std::default_random_engine generator_; // A random number generator for the various methods
 };

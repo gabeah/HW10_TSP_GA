@@ -26,14 +26,17 @@ Chromosome::~Chromosome()
   assert(is_valid());
 }
 
+double Chromosome::random_gen(double from, double to){ //random generator
+  return(from + double(generator_()-generator_.min())/(generator_.max()-generator_.min())* to);
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Perform a single mutation on this chromosome
 void
 Chromosome::mutate()
 {
-  // Add your implementation here
-  int q = rand(1, order_.size());
-  int u = rand(1, order_.size());
+  int q = random_gen(0, order_.size()-1);
+  int u = random_gen(0, order_.size()-1);
   auto thing = order_[q];
   order_[q] = order_[u];
   order_[u] = thing;
@@ -48,8 +51,9 @@ Chromosome::recombine(const Chromosome* other)
 {
   assert(is_valid());
   assert(other->is_valid());
-  unsigned a = rand(0, order_size());
-  unsigned b = rand(0, order_size());
+
+  unsigned a = random_gen(0, order_.size()-1);
+  unsigned b = random_gen(0, order_.size()-1);
   unsigned beginning;
   unsigned ending;
   if(a<b){
@@ -60,8 +64,9 @@ Chromosome::recombine(const Chromosome* other)
     beginning = b;
     ending = a;
   }
-  create_crossover_child(this, other, beginning, ending);
-  create_crossover_child(other, this, beginning, ending);
+  Chromosome* child_one = create_crossover_child(this, other, beginning, ending);
+  Chromosome* child_two = create_crossover_child(other, this, beginning, ending);
+  return std::pair<Chromosome*, Chromosome*>(child_one, child_two);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -147,7 +152,7 @@ Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
 {
   // Add your implementation here
   for(unsigned g=begin; g < end; g++){
-    if(value = order_[g]){
+    if(value == order_[g]){
       return true;
     }
   }
