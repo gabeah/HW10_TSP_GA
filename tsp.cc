@@ -151,7 +151,7 @@ int main(int argc, char** argv)
   out << cities.reorder(best_ordering);
 
   Chromosome a(&cities);
-  std::cout << a.get_fitness() << "this is fitness" << std:: endl;
+  //std::cout << a.get_fitness() << "this is fitness" << std:: endl;
 
   return 0;
 }
