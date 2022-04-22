@@ -1,5 +1,19 @@
 //Daniel Kryzhanovsky and Gabe Howland
 
+TO COMPILE:
+
+run the make file with command 'make'
+
+Some errors may appear as unused variables, it depends which generator is active.
+
+Change algorithms in tsp.cc, comment out one of the lines between lines 132-136.
+
+Output can also be changed within that file, just below the algorithm choice 
+
+///////////////////////////////////////////////////////////////////////////////
+
+METHOD:
+
 ///////////////////////////////////////////////////////////////////////////////
 Chromosome: For chromosome, we started off by making sure the is_valed returns 
 an actual order list so that the chromosme's could be innitialized within the 
